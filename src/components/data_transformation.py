@@ -20,17 +20,25 @@ class DataTransformation:
     def __init__(self):
         self.data_transformation_config = DataTransformationConfig()
 
-    def get_data_transformer_object(self):
+    def get_data_transformer_object(self, df):
         try:
-            self.numerical_cols = ["writing_score", "reading_score"]
-            self.categorical_cols = [
-                "gender",
-                "race_ethnicity",
-                "parental_level_of_education",
-                "lunch",
-                "test_preparation_course",
-            ]
+            self.categorical_cols = []
+            self.numerical_cols = []
 
+            for col in df.columns:
+                if df[col].dtype == 'object':
+                    self.categorical_cols.append(col)
+                else:
+                    self.numerical_cols.append(col)
+                    
+            # self.numerical_cols = ["writing_score", "reading_score"]
+            # self.categorical_cols = [
+            #     "gender",
+            #     "race_ethnicity",
+            #     "parental_level_of_education",
+            #     "lunch",
+            #     "test_preparation_course",
+            # ]
             self.numerical_pipeline = Pipeline(
                 steps = [
                     ("imputer", SimpleImputer(strategy="median")),
@@ -81,7 +89,7 @@ class DataTransformation:
             input_feature_test_df = test_df.drop(columns=[target_col_names], axis = 1)
             target_feature_test_df = test_df[target_col_names]
 
-            preprocessing_obj = self.get_data_transformer_object()
+            preprocessing_obj = self.get_data_transformer_object(input_feature_train_df)
 
             input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_df)
             input_feature_test_arr = preprocessing_obj.transform(input_feature_test_df)
