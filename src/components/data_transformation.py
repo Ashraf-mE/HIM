@@ -14,7 +14,7 @@ from src.logger import logging
 
 class DataTransformationConfig:
     def __init__(self):
-        self.preprocessor_obj_file_path = os.path.join("artifacts", "preprocessor.pickel")
+        self.preprocessor_obj_file_path = os.path.join("artifacts", "preprocessor.pickle")
 
 class DataTransformation:
     def __init__(self):
